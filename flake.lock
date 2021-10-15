@@ -1,0 +1,83 @@
+{
+  "nodes": {
+    "home-manager": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1615753545,
+        "narHash": "sha256-FR6vHvQlmQFAA26wNguEGWwav40Xgy9U6vRpT6UneTg=",
+        "owner": "nix-community",
+        "repo": "home-manager",
+        "rev": "07f6c6481e0cbbcaf3447f43e964baf99465c8e1",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nix-community",
+        "repo": "home-manager",
+        "type": "github"
+      }
+    },
+    "nixpkgs": {
+      "locked": {
+        "lastModified": 1620838695,
+        "narHash": "sha256-Eb3xr6aWt3lF8BgmZCgVJXy/ArmudeJXONGSqaSLfP0=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "acd49fab8ece11a89ef8ee49903e1cd7bb50f4b7",
+        "type": "github"
+      },
+      "original": {
+        "owner": "NixOS",
+        "ref": "nixpkgs-unstable",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
+    "nixpkgs_2": {
+      "locked": {
+        "lastModified": 1615532953,
+        "narHash": "sha256-SWpaGjrp/INzorEqMz3HLi6Uuk9I0KAn4YS8B4n3q5g=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "916ee862e87ac5ee2439f2fb7856386b4dc906ae",
+        "type": "github"
+      },
+      "original": {
+        "owner": "NixOS",
+        "ref": "nixos-unstable",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
+    "root": {
+      "inputs": {
+        "nixpkgs": "nixpkgs",
+        "sysprog-vm": "sysprog-vm"
+      }
+    },
+    "sysprog-vm": {
+      "inputs": {
+        "home-manager": "home-manager",
+        "nixpkgs": "nixpkgs_2"
+      },
+      "locked": {
+        "lastModified": 1620141922,
+        "narHash": "sha256-SGZmCkn1tFOu/vP4YCJOCh3QkBRRaN4XFcXCIloxzjc=",
+        "owner": "mschwaig",
+        "repo": "sysprog-vm",
+        "rev": "0962e1846ac6f11c60a7ca9abece729535ea86e3",
+        "type": "github"
+      },
+      "original": {
+        "owner": "mschwaig",
+        "repo": "sysprog-vm",
+        "type": "github"
+      }
+    }
+  },
+  "root": "root",
+  "version": 7
+}

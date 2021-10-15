@@ -1,0 +1,180 @@
+<html><head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<title>Assignment 3 - Factory</title>
+
+<style type="text/css">
+
+<!--
+
+body {
+
+font-family: Arial, Helvetica, sans-serif;
+
+font-size: 12pt;
+
+}
+
+h2 {
+
+font-size: 120%;
+
+color: #999999;
+
+border-bottom-width: 1px;
+
+border-bottom-style: solid;
+
+border-bottom-color: #999999;
+
+margin-top: 24pt;
+
+}
+
+h3 {
+
+font-size: 110%;
+
+font-style: italic;
+
+color: #999999;
+
+}
+
+
+
+div.note {
+
+background-color: #FFFFCC;
+
+border: 1px dashed #CCCCCC;
+
+padding: 10px;
+
+}
+
+.code {
+
+font-family: Verdana, Arial, Helvetica, sans-serif;
+
+font-weight: bold;
+
+color: #666666;
+
+}
+
+
+
+pre {
+
+font-family: "Courier New", Courier, mono;
+
+}
+
+
+
+.screen {
+
+color: #FFFFFF;
+
+background-color: #000000;
+
+border: 1px solid #999999;
+
+}
+
+
+
+div.program {
+
+font-family: "Courier New", Courier, mono;
+
+color: #000000;
+
+background: #FFFFFF;
+
+font-size: 10pt;
+
+border: 1px dashed #CCCCCC;
+
+}
+
+#terminal {
+  background: #FEFFDD;
+  height: 800px;
+  overflow-y: scroll;
+  font-family: "Courier New", Courier, mono;
+  white-space: pre;
+}
+
+-->
+
+</style>
+
+</head><body bgcolor="#ffffff">
+
+<h1>Live-Code submission</h1>
+
+        <form id="submissionTestForm">
+            <input type="file" name="factory" accept=".c" />
+            <input type="submit" />
+        </form>
+	<div id="terminal"></div>
+        <script>
+		// src: https://javascript.info/formdata and https://javascript.info/fetch-progress
+	submissionTestForm.onsubmit = async (e) => {
+		e.preventDefault();
+
+		let response = await fetch('http://localhost:8080/upload', { method: 'POST', body: new FormData(submissionTestForm)
+		});
+
+        	const reader = response.body.getReader();
+		let decoder = new TextDecoder('utf-8');
+
+		// infinite loop while the body is downloading
+		while(true) {
+		  // done is true for the last chunk
+		  // value is Uint8Array of the chunk bytes
+		  const {done, value} = await reader.read();
+		  logTerminal(decoder.decode(value))
+		  if (done) {
+		    break;
+		  }
+
+		}
+	}
+
+// src: https://stackoverflow.com/a/54769828
+var terminalDiv = document.getElementById('terminal');
+
+function logTerminal(content){
+  //check if div is scrolled to the bottom
+  var atBottom = isElementScrolledToBottom(terminalDiv);
+  
+  //add content
+  //var timeNode = document.createElement("p");
+  var timeText = document.createTextNode(content);
+  //timeNode.appendChild(timeText);
+  terminalDiv.appendChild(timeText);
+  
+  //if div was at the bottom, scroll to bottom again.
+  if(atBottom) {
+    scrollToBottom(terminalDiv);
+  }
+};
+
+//function to check if element is scrolled to the bottom
+function isElementScrolledToBottom(el) {
+  if (el.scrollTop >= (el.scrollHeight - el.offsetHeight)) {
+      return true;
+  }
+  return false;
+}
+
+//function to scroll to bottom
+function scrollToBottom(el) {
+  el.scrollTop = el.scrollHeight;
+}
+	</script>
+   </body>
+</html>
