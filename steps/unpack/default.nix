@@ -9,7 +9,7 @@ pkgs.runCommandLocal ("unpack" + submission-ref) {
   # unpack
   src="${student-submission}"
   if [[ $src == *.zip ]]; then
-    unzip "$src"
+    unzip "$src" || true
     python ${./unzip-assignment.py}
   fi
   if [[ $src == *.tgz ]]; then

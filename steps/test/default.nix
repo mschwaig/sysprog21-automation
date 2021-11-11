@@ -7,7 +7,7 @@ let
   '';
 in
 pkgs.runCommandLocal ("test" + submission-ref) {
-  buildInputs = [ built-assignment pkgs.python3 sysprog-vm-pkgs.valgrind pkgs.bats ref-data ];
+  buildInputs = [ built-assignment pkgs.python3 sysprog-vm-pkgs.valgrind pkgs.bats ref-data pkgs.xxd ];
   outputs = [ "out" "detailed" "student_output" ];
     } ''
     # run tests
