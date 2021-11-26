@@ -10,14 +10,16 @@ pkgs.runCommandLocal ("unpack" + submission-ref) {
   src="${student-submission}"
   if [[ $src == *.zip ]]; then
     unzip "$src" || true
-    python ${./unzip-assignment.py}
   fi
   if [[ $src == *.tgz ]]; then
     tar zxvf "$src"
-    python ${./unzip-assignment.py}
   fi
-  ls -alh
+  # flatten folder hierarchy
+  find . -mindepth 2 -type f -exec mv -i '{}' . ';'
   if [[ $src == *.c ]]; then
+    cp "$src" ./${src-name}
+  fi
+  if [[ $src == *.s ]]; then
     cp "$src" ./${src-name}
   fi
 
@@ -27,5 +29,5 @@ pkgs.runCommandLocal ("unpack" + submission-ref) {
 
   # copy unwanted files
   # TODO: remove this when unwanted files can be rejected at submission time
-  find . -type f ! -name ${src-name} ! -name env-vars -exec cp -t $unwanted {} +
+  find . -type f ! -name ${src-name} ! -name env-vars ! -name .attr* -exec cp -t $unwanted {} +
 ''
