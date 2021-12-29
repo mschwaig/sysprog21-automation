@@ -23,7 +23,15 @@ let
   # TODO: find a way to make this the distribution less unstable
   # so that submissions are more evenly partitioned for every seed value
   rnd-from-student-folder = folder: rnd-from-student-id (id-from-student-folder folder);
+  mapping = (student-folder:
+    let
+      student-data = moodle.parse-student-folder { inherit student-folder; };
+    in {
+      name = student-data.folder-name;
+      folder = student-folder;
+      path = "${student-folder}/${moodle.studentZipFileName student-folder}";
+    });
 in
   groupBy
-    (folder: (elemAt share (mod (rnd-from-student-folder folder) sharecount)) )
-    (subdirs (moodle.unzip-all { inherit moodle-zip; }))
+    (folder: (elemAt share (mod (rnd-from-student-folder folder.folder) sharecount)) )
+    (map mapping (subdirs (moodle.unzip-all { inherit moodle-zip; })))

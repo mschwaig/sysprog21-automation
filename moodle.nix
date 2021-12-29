@@ -3,7 +3,9 @@ let
   strings = pkgs.lib.strings;
   zipListsWith = pkgs.lib.zipListsWith;
   filterAttrs = pkgs.lib.filterAttrs;
+  attrNames = pkgs.lib.attrNames;
   last = pkgs.lib.last;
+  elemAt = pkgs.lib.elemAt;
   nameValueListsToAttr = names: values: builtins.listToAttrs (zipListsWith (name: value: {inherit name value; }) names values);
 in {
   parse-student-folder = { student-folder }:
@@ -32,4 +34,7 @@ in {
     pkgs.runCommand "moodle-unzip" { buildInputs = [ pkgs.unzipNLS ]; } ''
       unzip -I el_GR -O utf-8 ${moodle-zip} -d $out
     '';
+
+  # TODO: ensure folder only contains one file
+  studentZipFileName = student-folder: elemAt ( attrNames ( filterAttrs ( name: type: type == "regular")( builtins.readDir student-folder ) ) ) 0;
 }
