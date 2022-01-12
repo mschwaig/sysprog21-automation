@@ -17,7 +17,7 @@
     sysprog-vm-pkgs = import sysprog-vm.inputs.nixpkgs { inherit system; };
     moodle = import ./moodle.nix { inherit pkgs; };
   in {
-    lib.mkAssignment = { meta, binary-name, src-name, reference, ref-data, config }:
+    lib.mkAssignment = { meta, binary-name, src-names, reference, ref-data, config }:
     let
       commonPipelineArgs = {
         inherit meta reference;
@@ -29,7 +29,7 @@
             text = ''
               unzip "$input"/"$(ls $input)"
               find . -mindepth 2 -type f -exec mv -n '{}' . ';'
-              mv ${src-name} $out/
+              mv ${concatMapStrings (x: "${x} ") src-names} $out/
             '';
           }
           {
@@ -37,13 +37,14 @@
             buildInputs = with sysprog-vm-pkgs; [ gcc binutils gnumake pkgs.silver-searcher ];
             text = ''
               cp ${concatMapStrings (x: "${reference.src}/${x} ") reference.files} .
-              cp $unpack/${src-name} .
+              cp ${concatMapStrings (x: "$unpack/${x} ") src-names} .
               make
               cp ${binary-name} $out/
             '';
             quantityName = "warnings";
+            # TODO: adapt for multiple files
             quantify = ''
-              ag -c "${src-name}:[[:digit:]]+:[[:digit:]]+:.warning:" $log || echo 0
+              ag -c "(${concatStringsSep "|" src-names}):[[:digit:]]+:[[:digit:]]+:.warning:" $log || echo 0
             '';
           }
           {
@@ -127,7 +128,7 @@
             server-binary = self.packages."${system}".server + "/bin/live-feedback-server";
             eval-script = (pkgs.writeScriptBin "eval-submission" ''
               #!${pkgs.runtimeShell}
-              expr='import ${./eval-script-function.nix} { mkAssignment = (builtins.getFlake "${self}").lib.mkAssignment; binary-name="${binary-name}"; src-name="${src-name}"; ref-impl=${ref-impl}; ref-data=${ref-data}; config=${config}; student-submission = '"$1"';} '
+              expr='import ${./eval-script-function.nix} { mkAssignment = (builtins.getFlake "${self}").lib.mkAssignment; binary-name="${binary-name}"; src-names="${src-names}"; ref-impl=${ref-impl}; ref-data=${ref-data}; config=${config}; student-submission = '"$1"';} '
               exec nix build --no-link -L  --impure --expr "$expr"
             '') + "/bin/eval-submission";
           in (pkgs.writeScriptBin "run_server" ''
