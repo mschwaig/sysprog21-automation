@@ -4,7 +4,7 @@ import (
 )
 
 // this template applies for one of the 5 assignments
-assignment_no: int & >=0 & <=5
+assignment_no: int & >0 & <=5
 
 // every assignment except the first one are worth 100 points
 #point_totals: [ 25, 100, 100, 100, 100]
