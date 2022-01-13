@@ -3,6 +3,7 @@ with pkgs.lib;
 rec {
   mkPipeline = { steps, inputs, meta, reference, previous_root }:
   let
+    linkFarmWithPostBuild = (import ../utils.nix { inherit pkgs; }).linkFarmWithPostBuild;
     stepProperties =
       let
         firstStep = {
@@ -207,8 +208,11 @@ rec {
       }];
     }}";
   };
-  pipelineWithResults = studentPipelines ++ [ statusReportDrv metadataDrv referencePipeline ];
-  pipelineResult = pkgs.linkFarm meta.name pipelineWithResults;
+  pipelineWithResults = studentPipelines ++ [ referencePipeline ];
+  pipelineResult = linkFarmWithPostBuild meta.name pipelineWithResults ''
+    cp ${statusReportDrv.path} ${escapeShellArg statusReportDrv.name}
+    cp ${metadataDrv.path} ${escapeShellArg metadataDrv.name}
+  '';
   in pipelineResult;
 
   pipelineTestOutput =
