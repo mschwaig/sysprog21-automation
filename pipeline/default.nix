@@ -168,6 +168,46 @@ rec {
     in
     if isList inputs then evalList [] inputs else flatten (mapAttrsToList (folder_name: list: (evalList [ folder_name ] list) ) inputs);
 
+  studentPipelineResults =
+    let evalList = path_to_parent: input_list: map (input:
+    let
+      path_to = concatStringsSep "/" (path_to_parent ++ [ input.name ]);
+      pl = mkPipelineOfDrvs (input // { previous_output = "${previous_root}/${path_to}"; path_to = path_to; skip = []; }) studentSteps;
+      output = last pl.result;
+    in {
+      name = input.name;
+      path = output.path;
+    }) input_list;
+    in
+    if isList inputs then evalList [] inputs else flatten (mapAttrsToList (folder_name: list: (evalList [ folder_name ] list) ) inputs);
+
+  studentPipelineResultsForUpload = pkgs.linkFarm "output" studentPipelineResults;
+
+  pipelineResultZipForUpload = {
+      name = "upload.zip";
+      path = pkgs.runCommand "upload.zip" {
+        buildInputs = [ pkgs.p7zip ];
+      } ''
+        7z a -l -tzip $out ${studentPipelineResultsForUpload}/*
+      '';
+    };
+
+    pipelineGradeFile = { #map (output: output) studentPipelineResults;
+      name = "grades.csv";
+      path = pkgs.runCommand "grades.csv" {
+        buildInputs = [ pkgs.cue ];
+      } ''
+        echo "Identifier,\"Full name\",Grade,\"Last modified (grade)\"" > $out
+        for f in ${studentPipelineResultsForUpload}/*/correction.cue
+        do
+          student_data="$(basename "$(dirname "$f")")"
+          if [[ $student_data =~ ([^_]+)_([0-9]+)_assignsubmission_file_ ]]; then
+            echo "\"Participant ''${BASH_REMATCH[2]}\",\"''${BASH_REMATCH[1]}\",$(cue eval -c "$f" -e point_total),"
+          fi
+        done >> $out
+      '';
+      };#for i in ${studentPipelineResultsForUpload}/*/test;do wc -l "$i";done >> $out/summary.csv
+
     statusReportDrv =
     let
       statusReportHeader = "<th>Path/Name/ID</th>" + (concatMapStrings (step: "<th>${step.name}</th>") stepProperties);
@@ -208,7 +248,9 @@ rec {
       }];
     }}";
   };
-  pipelineWithResults = studentPipelines ++ [ referencePipeline ];
+  pipelineWithResults = studentPipelines ++ [
+    referencePipeline pipelineResultZipForUpload pipelineGradeFile
+  ];
   pipelineResult = linkFarmWithPostBuild meta.name pipelineWithResults ''
     cp ${statusReportDrv.path} ${escapeShellArg statusReportDrv.name}
     cp ${metadataDrv.path} ${escapeShellArg metadataDrv.name}

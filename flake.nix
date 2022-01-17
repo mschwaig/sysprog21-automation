@@ -106,8 +106,8 @@
               # copy results from previous stages to output
               # this is what gets returned to students
 
-              cp $buildLog $out/make_output.txt
-              cat $testLog | grep "^[^[:space:]]" > $out/test_output_summary.txt
+              cp $buildLog $out/make_output.txt || true
+              cat $testLog | grep "^[^[:space:]]" > $out/test_output_summary.txt || true
               cp $grade/correction.cue $out/correction.cue
             '';
           }
