@@ -21,7 +21,7 @@ def copy_writable(src, dst, *, follow_symlinks=True):
 
 cwd = pathlib.Path(os.getcwd())
 result_dir = cwd / 'result'
-state_dir = cwd / 'submissions'
+state_dir = cwd
 
 # read step data from repo
 with open(result_dir / 'metadata.json') as metadata_file:
