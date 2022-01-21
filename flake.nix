@@ -17,7 +17,7 @@
     sysprog-vm-pkgs = import sysprog-vm.inputs.nixpkgs { inherit system; };
     moodle = import ./moodle.nix { inherit pkgs; };
   in {
-    lib.mkAssignment = { meta, binary-name, src-names, reference, ref-data, config }:
+    lib.mkAssignment = { meta, binary-name, src-names, optional-src-names ? [], reference, ref-data, config }:
     let
       commonPipelineArgs = {
         inherit meta reference;
@@ -30,6 +30,10 @@
               unzip "$input"/"$(ls $input)"
               find . -mindepth 2 -type f -exec mv -n '{}' . ';'
               mv ${concatMapStrings (x: "${x} ") src-names} $out/
+              ${ if optional-src-names != []
+                   then "mv ${concatMapStrings (x: "${x} ") optional-src-names} $out/ || true"
+                   else ""
+              }
             '';
           }
           {
@@ -38,6 +42,10 @@
             text = ''
               cp ${concatMapStrings (x: "${reference.src}/${x} ") reference.files} .
               cp ${concatMapStrings (x: "$unpack/${x} ") src-names} .
+              ${ concatMapStrings (x: ''
+                cp -f $unpack/${x} . || true
+                '') optional-src-names
+              }
               make
               cp ${binary-name} $out/
             '';
