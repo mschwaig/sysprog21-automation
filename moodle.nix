@@ -31,8 +31,8 @@ in {
       );
 
   unzip-all = { moodle-zip }:
-    pkgs.runCommand "moodle-unzip" { buildInputs = [ pkgs.unzipNLS ]; } ''
-      unzip -I el_GR -O utf-8 ${moodle-zip} -d $out
+    pkgs.runCommand "moodle-unzip" { buildInputs = [ pkgs.p7zip ]; } ''
+      7z x ${moodle-zip} -o$out
     '';
 
   # TODO: ensure folder only contains one file
