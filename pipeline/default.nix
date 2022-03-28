@@ -80,7 +80,7 @@ rec {
       '';
 
       drv = pkgs.runCommandLocal (curr.name + meta.name) {
-        buildInputs = curr.buildInputs;
+        buildInputs = curr.buildInputs ++ [ pkgs.glibc ];
         outputs = [ "out" "status" ];
         text = curr.text;
         quantify = curr.quantify;
@@ -96,7 +96,9 @@ rec {
 
       ${prev.exports}
 
-      previous_output="${pipeline_instance.previous_output}/${curr.folder_name}"
+      # this is really ugly
+      # remove iconv once that encoding issue is fixed
+      previous_output=$(echo "${pipeline_instance.previous_output}/${curr.folder_name}" | iconv -f ISO88591 -t UTF-8)
 
       if [[ -e "$previous_output"${if curr.type != "MANUAL" then "/.manual" else ""} ]]; then
         echo "copying previous output" | tee $status/log.txt
