@@ -58,7 +58,7 @@
           {
             name = "test";
             type = "NON_REPEATABLE";
-            buildInputs = [ pkgs.bats pkgs.silver-searcher pkgs.ncurses ]; # TODO: remove ncurses (required for specific assignment) - add extraInputs mechanism?
+            buildInputs = [ pkgs.bats pkgs.silver-searcher sysprog-vm-pkgs.gdb ];
             text =
             let
               batsScript = pkgs.writeScriptBin "test_cases.bats" ''
