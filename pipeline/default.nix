@@ -1,4 +1,5 @@
-{ pkgs }:
+{ pkgs, glibc }:
+#  TODO: remove glibc when iconv is no longer required
 with pkgs.lib;
 rec {
   mkPipeline = { steps, inputs, meta, reference, previous_root }:
@@ -80,7 +81,7 @@ rec {
       '';
 
       drv = pkgs.runCommandLocal (curr.name + meta.name) {
-        buildInputs = curr.buildInputs ++ [ pkgs.glibc ];
+        buildInputs = curr.buildInputs ++ [ glibc ];
         outputs = [ "out" "status" ];
         text = curr.text;
         quantify = curr.quantify;

@@ -9,12 +9,12 @@
   let
     system = "x86_64-linux";
     pkgs = import nixpkgs { inherit system; };
-    pipelinelib = (import ./pipeline { inherit pkgs; });
+    sysprog-vm-pkgs = import sysprog-vm.inputs.nixpkgs { inherit system; };
+    pipelinelib = (import ./pipeline { inherit pkgs; glibc = sysprog-vm-pkgs.glibc; });
     mkPipeline = pipelinelib.mkPipeline;
   in
   with pkgs.lib;
   let
-    sysprog-vm-pkgs = import sysprog-vm.inputs.nixpkgs { inherit system; };
     moodle = import ./moodle.nix { inherit pkgs; };
   in {
     lib.mkAssignment = { meta, binary-name, src-names, optional-src-names ? [], reference, ref-data, config }:
