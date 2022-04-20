@@ -134,11 +134,11 @@
         program =
           let
             server-binary = self.packages."${system}".server + "/bin/live-feedback-server";
-            eval-script = (pkgs.writeScriptBin "eval-submission" ''
+            eval-script = (pkgs.writeScriptBin "eval-submission" (''
               #!${pkgs.runtimeShell}
-              expr='import ${./eval-script-function.nix} { mkAssignment = (builtins.getFlake "${self}").lib.mkAssignment; binary-name="${binary-name}"; src-names="${src-names}"; ref-impl=${ref-impl}; ref-data=${ref-data}; config=${config}; student-submission = '"$1"';} '
-              exec nix build --no-link -L  --impure --expr "$expr"
-            '') + "/bin/eval-submission";
+              expr='import ${./eval-script-function.nix} { mkAssignment = (builtins.getFlake "${self}").lib.mkAssignment; meta={name="${meta.name}";rev="${meta.rev}";}; binary-name="${binary-name}"; src-names=[${pkgs.lib.strings.concatMapStrings (x: "\"${x}\" ") src-names}]; reference={ src=${reference.src}; skip = ${builtins.toString reference.skip}; files = [${pkgs.lib.strings.concatMapStrings (x: "\"${x}\" ") reference.files}]; }; ref-data=${ref-data}; config=${config}; student-submission = '"$1"';} '
+              exec nix build --no-link -L --impure --expr "$expr"
+            '')) + "/bin/eval-submission";
           in (pkgs.writeScriptBin "run_server" ''
           ${server-binary} -e ${eval-script}
         '') + "/bin/run_server";

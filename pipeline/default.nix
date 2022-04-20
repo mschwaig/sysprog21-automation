@@ -73,7 +73,7 @@ rec {
           "FAIL" = "<td bgcolor=\"#F08080\"><a href=${log_path}>view log</a>${if curr.type == "MANUAL" then "&nbsp;<a href=${out_path}>view result</a>" else ""}</td>";
           "PREV_FAIL" = "<td bgcolor=\"#D3D3D3\">SKIPPED</td>";
         };
-        key =  removeSuffix "\n" (builtins.readFile "${drv.status}/status");
+        key =  builtins.unsafeDiscardStringContext (removeSuffix "\n" (builtins.readFile "${drv.status}/status")); # TODO: remove unsafeDiscardStringContext when live-feedback stops complaining
         lookup = if cases ? "${key}" then cases."${key}" else throw "invalid key '${key}'";
       in
       prev.statusReportData + ''

@@ -1,7 +1,7 @@
-{ mkAssignment, binary-name, src-name, ref-impl, ref-data, config, student-submission }:
+{ mkAssignment, meta, binary-name, src-names, reference, ref-data, config, student-submission }:
 let
   assignmentlib = mkAssignment {
-    inherit binary-name src-name ref-impl ref-data config;
+    inherit meta binary-name src-names reference ref-data config;
   };
 in
   assignmentlib.processSubmission {
@@ -13,6 +13,4 @@ in
     submission-ref = "Anonymous";
     student-feedback = "${config}/criteria_preformatted.txt";
     student-folder-name = "Anonymous";
-    organize-output = { submission-ref, assignment, student-feedback, src-name, binary-name }:
-      assignment.tested;
   }
