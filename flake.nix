@@ -1,7 +1,7 @@
 {
   inputs = {
     nixpkgs.url = github:NixOS/nixpkgs/nixpkgs-unstable;
-    sysprog-vm.url = github:mschwaig/sysprog-vm;
+    sysprog-vm.url = github:mschwaig/sysprog-vm/st22;
   };
 
   outputs = { self, nixpkgs, sysprog-vm }:
@@ -38,7 +38,7 @@
           }
           {
             name = "build";
-            buildInputs = with sysprog-vm-pkgs; [ gcc binutils gnumake pkgs.silver-searcher ];
+            buildInputs = with sysprog-vm-pkgs; [ clang_13 binutils gnumake pkgs.silver-searcher ];
             text = ''
               cp ${concatMapStrings (x: "${reference.src}/${x} ") reference.files} .
               cp ${concatMapStrings (x: "$unpack/${x} ") src-names} .
