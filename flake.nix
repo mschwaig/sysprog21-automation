@@ -58,7 +58,7 @@
           {
             name = "test";
             type = "NON_REPEATABLE";
-            buildInputs = [ pkgs.bats pkgs.silver-searcher sysprog-vm-pkgs.gdb ];
+            buildInputs = [ pkgs.bats pkgs.silver-searcher sysprog-vm-pkgs.gdb pkgs.python3 ];
             text =
             let
               batsScript = pkgs.writeScriptBin "test_cases.bats" ''
@@ -68,6 +68,7 @@
             in ''
               export BINARY=$build/${binary-name}
               export REF_DATA=${ref-data}
+              export CONFIG=${config}
               mkdir $out/student_output
               export STUDENT_OUTPUT=$out/student_output
               # TODO: make bats return value 0 on failing tests
