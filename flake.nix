@@ -17,12 +17,12 @@
   let
     moodle = import ./moodle.nix { inherit pkgs; };
   in {
-    lib.mkAssignment = { meta, binary-name, src-names, optional-src-names ? [], reference, ref-data, config }:
+    lib.mkAssignment = { meta, binary-name, src-names, optional-src-names ? [], reference, ref-data, config, steps }:
     let
       commonPipelineArgs = {
         inherit meta reference;
 
-        steps = [
+        steps = if steps != null then steps else [
           {
             name = "unpack";
             buildInputs = [ pkgs.unzip ];
