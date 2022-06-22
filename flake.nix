@@ -17,7 +17,7 @@
   let
     moodle = import ./moodle.nix { inherit pkgs; };
   in {
-    lib.mkAssignment = { meta, binary-name, src-names, optional-src-names ? [], reference, ref-data, config, steps }:
+    lib.mkAssignment = { meta, binary-name, src-names, optional-src-names ? [], reference, ref-data, config, steps ? null }:
     let
       commonPipelineArgs = {
         inherit meta reference;
