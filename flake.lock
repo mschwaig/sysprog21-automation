@@ -2,7 +2,10 @@
   "nodes": {
     "home-manager": {
       "inputs": {
-        "nixpkgs": "nixpkgs_2"
+        "nixpkgs": [
+          "sysprog-vm",
+          "nixpkgs"
+        ]
       },
       "locked": {
         "lastModified": 1615753545,
@@ -36,30 +39,16 @@
     },
     "nixpkgs_2": {
       "locked": {
-        "lastModified": 1642130244,
-        "narHash": "sha256-/5FhZkZFQCRQIRFosUQW1zmDrsNHVOJIB/+XgRPHiPU=",
+        "lastModified": 1655770856,
+        "narHash": "sha256-GZRIyHjuCbOl0UA8ClKmyRxZkCQEh/rsvU0otH037BU=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "bc59ba15b64d0a0ee1d1764f18b4f3480d2c3e5a",
-        "type": "github"
-      },
-      "original": {
-        "id": "nixpkgs",
-        "type": "indirect"
-      }
-    },
-    "nixpkgs_3": {
-      "locked": {
-        "lastModified": 1615532953,
-        "narHash": "sha256-SWpaGjrp/INzorEqMz3HLi6Uuk9I0KAn4YS8B4n3q5g=",
-        "owner": "NixOS",
-        "repo": "nixpkgs",
-        "rev": "916ee862e87ac5ee2439f2fb7856386b4dc906ae",
+        "rev": "63198c9ccefdbd337cef0d85db0ea2689f4ce418",
         "type": "github"
       },
       "original": {
         "owner": "NixOS",
-        "ref": "nixos-unstable",
+        "ref": "nixos-21.11",
         "repo": "nixpkgs",
         "type": "github"
       }
@@ -73,18 +62,19 @@
     "sysprog-vm": {
       "inputs": {
         "home-manager": "home-manager",
-        "nixpkgs": "nixpkgs_3"
+        "nixpkgs": "nixpkgs_2"
       },
       "locked": {
-        "lastModified": 1620141922,
-        "narHash": "sha256-SGZmCkn1tFOu/vP4YCJOCh3QkBRRaN4XFcXCIloxzjc=",
+        "lastModified": 1646656383,
+        "narHash": "sha256-CqUm+cqwnBFHqrWLUlbkLX37Yn91flJsysmXbSv1doQ=",
         "owner": "mschwaig",
         "repo": "sysprog-vm",
-        "rev": "0962e1846ac6f11c60a7ca9abece729535ea86e3",
+        "rev": "f34b81bacf49fcdc82eea7c111214c907054dfd7",
         "type": "github"
       },
       "original": {
         "owner": "mschwaig",
+        "ref": "st22",
         "repo": "sysprog-vm",
         "type": "github"
       }
