@@ -58,7 +58,7 @@
           {
             name = "test";
             type = "NON_REPEATABLE";
-            buildInputs = [ pkgs.bats pkgs.silver-searcher sysprog-vm-pkgs.gdb pkgs.python3 ];
+            buildInputs = [ pkgs.bats pkgs.silver-searcher sysprog-vm-pkgs.gdb pkgs.python3 pkgs.jq ];
             text =
             let
               batsScript = pkgs.writeScriptBin "test_cases.bats" ''
